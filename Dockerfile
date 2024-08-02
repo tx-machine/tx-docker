@@ -22,9 +22,6 @@ RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 # Starten des SSH-Agenten und Hinzufügen des Schlüssels
 RUN eval $(ssh-agent -s) && ssh-add /root/.ssh/id_rsa_nextgen2
 
-# Testen der SSH-Verbindung
-RUN ssh -T git@github.com || exit 1
-
 # Anwendungscode klonen
 RUN git clone git@github.com:tx-machine/tx-nextGen.git /app
 
@@ -36,4 +33,3 @@ EXPOSE 5000
 
 # Startbefehl festlegen
 CMD ["python3", "/app/app.py"]
-#note

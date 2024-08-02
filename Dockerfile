@@ -13,10 +13,17 @@ RUN apt-get update && apt-get install -y \
 
 # SSH-Konfigurationsdatei kopieren und Berechtigungen setzen
 COPY .ssh /root/.ssh
-RUN chmod 600 /root/.ssh/id_rsa
+RUN chmod 600 /root/.ssh/id_rsa_nextgen2
+RUN chmod 700 /root/.ssh
 
 # GitHub-Host zu known_hosts hinzufügen, um die Eingabeaufforderung zu vermeiden
 RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+
+# Starten des SSH-Agenten und Hinzufügen des Schlüssels
+RUN eval $(ssh-agent -s) && ssh-add /root/.ssh/id_rsa_nextgen2
+
+# Testen der SSH-Verbindung
+RUN ssh -T git@github.com || exit 1
 
 # Anwendungscode klonen
 RUN git clone git@github.com:tx-machine/tx-nextGen.git /app
@@ -29,3 +36,4 @@ EXPOSE 5000
 
 # Startbefehl festlegen
 CMD ["python3", "/app/app.py"]
+#note

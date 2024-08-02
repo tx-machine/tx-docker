@@ -19,7 +19,7 @@ RUN chmod 600 /root/.ssh/id_rsa
 RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 
 # Anwendungscode klonen
-RUN git clone git@github.com:username/tx-nextGen.git /app
+RUN git clone git@github.com:tx-machine/tx-nextGen.git /app
 
 # Python-Abhängigkeiten installieren
 RUN pip3 install -r /app/requirements.txt

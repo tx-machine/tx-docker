@@ -8,10 +8,18 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
-    git
+    git \
+    openssh-client
+
+# SSH-Konfigurationsdatei kopieren und Berechtigungen setzen
+COPY .ssh /root/.ssh
+RUN chmod 600 /root/.ssh/id_rsa
+
+# GitHub-Host zu known_hosts hinzufügen, um die Eingabeaufforderung zu vermeiden
+RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 
 # Anwendungscode klonen
-RUN git clone https://github.com/username/tx-nextGen.git /app
+RUN git clone git@github.com:username/tx-nextGen.git /app
 
 # Python-Abhängigkeiten installieren
 RUN pip3 install -r /app/requirements.txt
